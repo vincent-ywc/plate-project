@@ -542,7 +542,9 @@
 				// 提交信息
 				$('.submit-btn').on('click', function () {
 					if ($('#remain-num').html() == 0) {
-						sradmin.UI.show_modal(false, "是否确认提交板件发货信息？", '确定', '取消', '', '', false, '')
+						sradmin.UI.show_modal(false, "是否确认提交板件发货信息？", '确定', '取消', function () {
+							sradmin.UI.toast.success('提交成功', plateObj.toastTime)
+						}, '', false, '')
 					} else {
 						sradmin.UI.toast.error('提交失败，板件信息未录入完毕', plateObj.toastTime)
 					}
