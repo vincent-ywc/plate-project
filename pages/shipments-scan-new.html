@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>板件发货</title>
+		<style>
+			body {
+				padding: 0 200px;
+			}
+			ul, ol{
+				list-style-type:none;
+			}
+			button {
+				margin: 0;
+				padding: 0;
+				border: 1px solid transparent;
+				outline: none; 
+			}
+			.plate-navigate-right {
+				padding-top: 8px;
+				padding-bottom: 8px;
+				color: #0088cc!important;
+				font-family: "微软雅黑"!important;
+				font-style: normal;
+			}
+			
+			.label {
+				width: 15%;
+				font-size: 13px;
+				text-align: left;
+				font-family: "微软雅黑";
+				color: #555555;
+			}
+			
+			.area {
+				width: auto;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			.plate-table-view-cell label~input,
+			.plate-table-view-cell label~select,
+			.plate-table-view-cell label~textarea {
+				width: 65%;
+			}
+			
+			.plate-input-row input,
+			textarea,
+			select {
+				padding: 5px 0px 0px 6px !important;
+				margin-top: 0px !important;
+				margin-bottom: 0px !important;
+			}
+			
+			.plate-table-view-cell:after {
+				background-color: #F3F3F3!important;
+			}
+			
+			.plate-table-view input,
+			textarea {
+				color: #222222;
+				font-family: "微软雅黑";
+				font-size: 15px;
+			}
+			
+			.plate-table-view-cell label {
+				width: 35%;
+				text-align: left;
+				height: 100%;
+				background-color: white;
+			}
+			
+			.plate-input-row label {
+				width: 35%;
+				font-family: "微软雅黑";
+				background-color: #F3F3F3;
+				height: 100%;
+				color: #6D6D72;
+				font-size: 15px;
+			}
+			
+			.plate-input-row input {
+				width: 60%;
+				height: 100%;
+				font-size: medium;
+				font-family: "微软雅黑";
+				vertical-align: middle;
+				margin-left: 6px;
+			}
+			
+			.plate-input-row textarea {
+				width: 60%;
+				height: 100%;
+			}
+			
+			.plate-input input {
+				width: 60%;
+				height: 100%;
+			}
+			
+			.plate-bar {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+			
+			.plate-indexed-list-search input {
+				border-radius: 0px;
+				margin: 0px;
+				background-color: #fafafa;
+				margin-left: 25px;
+				height: 40px;
+				line-height: 40px;
+			}
+			
+			p {
+				background-color: rgb(239, 239, 244);
+				font-size: 10px;
+				border: 0;
+			}
+			span {
+				padding: 8px 15px;
+				display: inline-block;
+			}
+			.plate-content {
+				margin: 0 auto;
+			}
+			.mt20 {
+				margin-top: 20px;
+			}
+			.pl-button {
+			    display: inline-block;
+			    line-height: 1;
+			    white-space: nowrap;
+			    cursor: pointer;
+			    background: #fff;
+			    border: 1px solid #dcdfe6;
+			    color: #606266;
+			    -webkit-appearance: none;
+			    text-align: center;
+			    box-sizing: border-box;
+			    outline: none;
+			    margin: 0;
+			    transition: .1s;
+			    font-weight: 500;
+			    -moz-user-select: none;
+			    -webkit-user-select: none;
+			    -ms-user-select: none;
+			    padding: 12px 20px;
+			    font-size: 14px;
+			    border-radius: 4px;
+			}
+			.pl-button-primary {
+			    color: #fff;
+			    background-color: #409eff;
+			    border-color: #409eff;
+			}
+			.pl-button-primary:focus, .pl-button-primary:hover {
+			    background: #66b1ff;
+			    border-color: #66b1ff;
+			    color: #fff;
+			}
+			.submit-btn {
+				width: 40%;
+				font-size: 16px;
+				margin:40px auto 0;
+				display: block;
+			}
+			.plate-bar {
+				border-bottom: 1px solid #888;
+			}
+			/* 单选框样式 */
+			.radio-beauty-container {
+			  font-size: 0;
+			}
+			.radio-beauty-container input[type="radio"] {
+				vertical-align: middle;
+				zoom: 1.3;
+			}
+			.radio-beauty-container input[type="radio"]:checked + .radio-beauty {
+			  padding: 2px;
+			  background-color: green;
+			  background-clip: content-box;
+			}
+			.radio-beauty-container .radio-name {
+			  vertical-align: middle;
+			  font-size: 16px;
+			  color: #6D6D72;
+			}
+			.radio-beauty-container .radio-beauty {
+			  width: 18px;
+			  height: 18px;
+			  box-sizing: border-box;
+			  display: inline-block;
+			  border: 1px solid green;
+			  vertical-align: middle;
+			  margin: 0 6px 0 3px;
+			  border-radius: 50%;
+			  vertical-align: bottom;
+			}
+			/* 板件card样式 */
+			.pl-card {
+			    border-radius: 4px;
+			    border: 1px solid #409eff;
+			    color: #303133;
+				padding: 20px;
+				margin-bottom: 20px;
+			}
+			.item-title {
+				font-size: 20px;
+				color: #4b7598;
+			}
+			/* 表格样式 */
+			.table-responsive {
+			    min-height: .01%;
+			    overflow-x: auto;
+				padding: 20px 40px 0;
+			}
+			.table {
+			    width: 100%;
+			    max-width: 100%;
+			    margin-bottom: 40px;
+			}
+			.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+			    padding: 8px;
+			    line-height: 1.42857143;
+			    vertical-align: top;
+			    border-top: 1px solid #ddd;
+			}
+			.table>thead>tr>th {
+			    vertical-align: bottom;
+			}
+			.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+			    padding: 10px;
+			    line-height: 1.5;
+			    border-color: #eceeef;
+			}
+			.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+			    border-top: 0;
+			}			
+			.label {
+			    display: inline;
+			    padding: .3em .8em .4em;
+			    font-size: 75%;
+			    font-weight: 700;
+			    line-height: 1;
+			    color: #fff;
+			    text-align: center;
+			    white-space: nowrap;
+			    vertical-align: baseline;
+			    border-radius: .25em;
+			}
+			.label-warning {
+			    background-color: #f0ad4e;
+			}
+			.label-success {
+			    background-color: #15c377;
+			}
+			#cur-plate, #all-num, #remain-num, #com-num, #cur-model, #cur-plate-applynum{
+				padding: 0 !important;
+			}
+			.pl-button-update {
+				line-height: .5px;
+				background-color: #33cabb;
+				border-color: #33cabb;
+			}
+			.pl-button-update:hover, .pl-button-update:focus {
+				background-color: #5edace;
+				border-color: #5edace;
+			}
+			.scan-tips {
+				text-align: right;
+				background-color: #fff;
+				font-size: 14px;
+				color: red;
+			}
+			#scan-result tr:hover {
+				background-color: #f0f8fc;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="plate-bar plate-bar-nav">
+			<h2 class="plate-title">板件发货</h2>		
+		</div>
+		<div class="plate-content">
+			<div class="plate-scroll-wrapper">
+				<div class="plate-scroll">
+					<ul class="plate-table-view mt20">
+						<li class="plate-table-view-cell plate-collapse plate-active">
+							<a class="plate-navigate-right">基本信息</a>
+							<ul class="plate-table-view" style="margin-top: 10px;">
+								<!--动态加载数据-->
+								<div class="0">
+									<li class="plate-table-view-cell classname ">
+										<div class="plate-input-row">
+											<label>SN:</label>
+											<span id="sn"></span>
+										</div>
+									</li>
+									<li class="plate-table-view-cell classname ">
+										<div class="plate-input-row">
+											<label>申请人:</label>
+											<span id="fld_ApplyUser">杨文成</span>
+										</div>
+									</li>
+									<li class="plate-table-view-cell classname ">
+										<div class="plate-input-row">
+											<label>申请时间:</label>
+											<span id="fld_ApplyDate">2020-03-18</span>
+										</div>
+									</li>
+								</div>
+							</ul>
+						</li>
+						<li class="plate-table-view-cell plate-collapse plate-active mt20" style="padding-right: 40px;">
+							<a class="plate-navigate-right">板件扫描区</a>
+							<ul class="plate-table-view mt20" id="plate-box">
+								<li class="plate-table-view-cell classname pl-card">
+									<div class="item-title">型号：<span id="cur-model"></span></div>
+									<div class="item-title mt20" style="font-size:16px;">当前序号/申请数量：<span id="cur-plate"></span>/<span id="cur-plate-applynum"></span></div>
+									<div class="radio-beauty-container mt20">
+										<label>
+											<input type="radio" name="radioName1" checked class="radio-scan" data-index="1">
+											<label class="radio-name" style="margin-right: 20px;">扫码确认</label>
+										</label>
+										<label>
+											<input type="radio" name="radioName1" id="radio-manual" data-index="1"/>
+											<label class="radio-name">手动确认</label>
+										</label>
+									</div>
+									<div class="plate-input-row mt20">
+										<label style="height: 90px;">编号:</label>
+										<input type="text" class="plate-input" data-index="1" id="scan-input"/>
+									</div>
+								</li>
+							</ul>
+						</li>
+						<li class="plate-table-view-cell plate-collapse plate-active" style="margin-top: 20px;">
+							<a class="plate-navigate-right">板件录入信息</a>
+							<div class="table-responsive">
+								<table class="table table-hover" cellpadding="0" cellspacing="0">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>板件型号</th>
+											<th>扫描编号</th>
+											<th>录入类别</th>
+											<th>操作</th>
+										</tr>
+									</thead>
+									<tbody id="scan-result">
+									</tbody>
+								</table>
+								<p class="scan-tips">* 共申请<span id="all-num"></span>个板件，已录入<span id="com-num"></span>个板件，待录入<span id="remain-num"></span>个板件</p>
+							</div>
+						</li>
+					</ul>
+					<button type="button" class="pl-button pl-button-primary submit-btn">提交发货信息</button>
+				</div>
+			</div>
+		</div>
+		<script src="../js/jquery-1.7.1.min.js"></script>
+		<script src="../js/sr-common.js"></script>
+		<script>
+			// 初始化对象
+			var plateObj = {
+				toastTime: 5000,
+				plateIndex: 1,
+				updateId: 0,
+				updateIndex: 0,
+				updateModel: '',
+				updateModelIndex: '',
+				updateAllNum: 0,
+				allNum:	parseInt(sradmin.Utils.getUrlParam('allNum')),
+				curModelIndex: -1,
+				tableId: 1,
+				applyPlateMsg: [
+					{
+						model: 'abc',
+						applyNum: 3
+					},
+					{
+						model: 'def',
+						applyNum: 2
+					},
+					{
+						model: 'ghi',
+						applyNum: 4
+					}
+				]
+			}
+			// 请求集合
+			plateObj.request = {
+				
+			}
+			// 方法集合
+			plateObj.method = {
+				// 允许编辑
+				openEdit: function () {
+					$('.plate-input').attr('disabled', false)
+					$('#radio-manual').attr('disabled', false)
+					$('.radio-scan').attr('disabled', false)
+				},
+				// 关闭编辑
+				closeEdit: function () {
+					$('.plate-input').attr('disabled', true)
+					$('#radio-manual').attr('disabled', true)
+					$('.radio-scan').attr('disabled', true)
+				},
+				updateModelScan: function () {
+					plateObj.curModelIndex += 1
+					plateObj.plateIndex = 1
+					$('#cur-plate').html(plateObj.plateIndex)
+					$('#cur-model').html(plateObj.applyPlateMsg[plateObj.curModelIndex]['model'])
+					$('#cur-plate-applynum').html(plateObj.applyPlateMsg[plateObj.curModelIndex]['applyNum'])
+				},
+				// 添加/更新板件信息到表格中
+				addScanItem: function (index, type, code) {
+					var modelApplyNum = plateObj.applyPlateMsg[plateObj.curModelIndex]['applyNum']
+					var modelName = plateObj.updateId ? plateObj.updateModel : plateObj.applyPlateMsg[plateObj.curModelIndex]['model']
+					var id = plateObj.updateId ? plateObj.updateId : plateObj.tableId
+					var indexItem = plateObj.updateId ? plateObj.updateIndex : plateObj.plateIndex
+					var modelAllNum = plateObj.updateId ? plateObj.updateAllNum : plateObj.applyPlateMsg[plateObj.curModelIndex]['applyNum']
+					var htmlStr = '<tr>' + 
+									'<td>' + id + '</td>' +
+									'<td>' + modelName + '</td>' +
+									'<td>' + code + '</td>' + 
+									'<td>' + 
+										(type === 'code' ? '<span class="label label-success">扫码确认</span>' : '<span class="label label-warning">手动确认</span>') +
+									'</td>' +
+									'<td><button type="button" class="pl-button pl-button-primary pl-button-update" data-id="' + id + '" data-index="' + indexItem + '" data-model="' + modelName + '" data-modelAllNum="' + modelAllNum + '">修改</button></td>' +
+								  '</tr>'
+					var str = ''
+					// 修改
+					if (plateObj.updateId) {
+						// 当前录入大于申请数量
+						if (plateObj.curModelIndex >= plateObj.applyPlateMsg.length - 1 && plateObj.plateIndex >= modelApplyNum) {
+							str = '已完成对型号'+ modelName + '中第' + indexItem + '块板件的修改'
+							// 禁止继续编辑
+							plateObj.method.closeEdit()
+						} else {
+							str = '已完成对型号'+ modelName + '中第' + indexItem + '块板件的修改，可继续扫描型号' + plateObj.applyPlateMsg[plateObj.curModelIndex]['model'] + '中第' + plateObj.plateIndex + '块板件'
+						}
+						// 替换该行板件数据
+						$('#scan-result').find('tr').eq(plateObj.updateId - 1).after(htmlStr).remove()
+						// 重置为最新扫描板件信息
+						$('#cur-plate').html(plateObj.plateIndex > modelApplyNum ? modelApplyNum : plateObj.plateIndex)
+						$('#cur-model').html(plateObj.applyPlateMsg[plateObj.curModelIndex]['model'])
+						$('#cur-plate-applynum').html(plateObj.applyPlateMsg[plateObj.curModelIndex]['applyNum'])
+						// 修改成功，重新将修改索引重置为0
+						plateObj.updateId = 0
+					} else {
+						// 新增
+						// 统计录入的数量
+						$('#com-num').html(plateObj.tableId)
+						$('#remain-num').html(plateObj.allNum - plateObj.tableId)
+						// 当前录入小于申请数量
+						if (plateObj.plateIndex < modelApplyNum) {
+							str = '型号' + modelName + '已完成第'+ plateObj.plateIndex +'块板件的录入，可开始扫描第' + (plateObj.plateIndex + 1) + '块板件'
+							$('#scan-result').append(htmlStr)
+							$('#cur-plate').html(index + 1 > modelApplyNum ? modelApplyNum : index + 1)
+							plateObj.plateIndex += 1
+							// 更新表格id
+							plateObj.tableId += 1
+						} else if (plateObj.plateIndex == modelApplyNum) {
+							// 当前录入等于申请数量
+							// 是否还有型号待录入
+							if (plateObj.curModelIndex < plateObj.applyPlateMsg.length - 1) {
+								plateObj.method.updateModelScan()
+								str = '型号' + modelName + '已完成所有板件的录入，可开始录入下一型号信息'
+							} else {
+								str = '型号' + modelName + '已完成所有板件的录入，所有申请的型号板件均已完成信息录入'
+								plateObj.plateIndex += 1
+								// 禁止继续编辑
+								plateObj.method.closeEdit()
+							}
+							$('#scan-result').append(htmlStr)
+							// 更新表格id
+							plateObj.tableId += 1
+						} else {
+							// 当前录入大于申请数量
+							str = '录入失败，所有申请的板件均已完成信息录入，请勿继续添加'
+						}
+					}
+					sradmin.UI.toast.success(str, plateObj.toastTime)
+					$('#scan-result tr').css('backgroundColor', '')
+				}
+			}
+			// 事件集合
+			plateObj.event = function () {
+				// 扫描完成
+				$('#plate-box').on('keydown', '.plate-input', function (e) {
+					e = e || event;
+					var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+					console.log(keyCode)
+					if(keyCode == 13){
+						e.preventDefault();
+						plateObj.method.addScanItem(plateObj.plateIndex, 'code', $('#scan-input').val())
+						$('#scan-input').val('')
+						return false;
+					}
+				})
+				
+				// 手动确认
+				$('#plate-box').on('change', '#radio-manual', function () {
+					sradmin.UI.show_modal(false, '型号' + plateObj.applyPlateMsg[plateObj.curModelIndex]['model'] + '中第' + (plateObj.updateId ? plateObj.updateId : plateObj.plateIndex) + '块板件确定设置为手动确认？', '确定', '取消', function () {
+						plateObj.method.addScanItem(plateObj.plateIndex, 'manual', '')
+						$('.radio-scan').attr('checked', true)
+						$('.plate-input').focus()
+					}, '', false, '')
+				})
+				
+				// 修改
+				$('#scan-result').on('click', '.pl-button-update', function () {
+					// 允许编辑
+					$(this).parent().parent().css('backgroundColor', '#f0f8fc').siblings().css('backgroundColor', '')
+					plateObj.method.openEdit()
+					$('.radio-scan').attr('checked', true)
+					$('.plate-input').focus()
+					var id = $(this).attr('data-id')
+					var index = $(this).attr('data-index')
+					var model = $(this).attr('data-model')
+					var updateAllNum = $(this).attr('data-modelallnum')
+					plateObj.updateId = parseInt(id)
+					plateObj.updateIndex = parseInt(index)
+					plateObj.updateModel = model
+					plateObj.updateAllNum = parseInt(updateAllNum)
+					$('#cur-model').html(model)
+					$('#cur-plate').html(index)
+					$('#cur-plate-applynum').html(updateAllNum)
+					sradmin.UI.toast.success('可开始对型号' + model + '中第' +  index + '块板件进行重新录入', plateObj.toastTime)
+				})
+				
+				// 提交信息
+				$('.submit-btn').on('click', function () {
+					if ($('#remain-num').html() == 0) {
+						sradmin.UI.show_modal(false, "是否确认提交板件发货信息？", '确定', '取消', '', '', false, '')
+					} else {
+						sradmin.UI.toast.error('提交失败，板件信息未录入完毕', plateObj.toastTime)
+					}
+				})
+			}
+			plateObj.init = function () {
+				// 初始化聚焦
+				$('.plate-input').eq(plateObj.plateIndex - 1).focus()
+				$('#sn').html(sradmin.Utils.getUrlParam('sn'))
+				// 初始化统计数量
+				$('#all-num').html(plateObj.allNum)
+				$('#com-num').html(0)
+				$('#remain-num').html(plateObj.allNum)
+				sradmin.UI.toast.success('型号' + plateObj.applyPlateMsg[0]['model'] + '可开始扫描第' + plateObj.plateIndex +'块板件', plateObj.toastTime)
+				plateObj.method.updateModelScan()
+				plateObj.event()
+			}
+			
+			// 执行
+			plateObj.init()
+		</script>
+	</body>
+</html>

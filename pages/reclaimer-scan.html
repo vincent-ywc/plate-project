@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.css" />
+		<style>
+			.mui-navigate-right {
+				padding-top: 8px;
+				padding-bottom: 8px;
+				color: #0088cc!important;
+				font-family: "微软雅黑"!important;
+				font-style: normal;
+			}
+			/*.mui-navigate-right: {
+				background-color: #F3F3F3;
+			}*/
+			
+			.label {
+				width: 15%;
+				font-size: 13px;
+				text-align: left;
+				font-family: "微软雅黑";
+				color: #555555;
+			}
+			
+			.area {
+				width: auto;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			/*.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 72%;
+				height: 100%;
+			}*/
+			
+			.mui-table-view-cell label~input,
+			.mui-table-view-cell label~select,
+			.mui-table-view-cell label~textarea {
+				width: 65%;
+			}
+			
+			.classname {
+				padding: 0px 0px!important;
+				margin-top: 0px !important;
+				margin-bottom: 0px !important;
+			}
+			
+			.mui-input-row input,
+			textarea,
+			select {
+				padding: 5px 0px 0px 6px !important;
+				margin-top: 0px !important;
+				margin-bottom: 0px !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #F3F3F3!important;
+			}
+			
+			.mui-table-view input,
+			textarea {
+				color: #222222;
+				font-family: "微软雅黑";
+				font-size: 15px;
+			}
+			
+			.mui-table-view-cell label {
+				width: 35%;
+				text-align: left;
+				height: 100%;
+				background-color: white;
+			}
+			
+			.mui-input-row label {
+				width: 35%;
+				font-family: "微软雅黑";
+				background-color: #F3F3F3;
+				height: 100%;
+				color: #6D6D72;
+				font-size: 15px;
+			}
+			
+			.mui-input-row input {
+				width: 60%;
+				height: 100%;
+				font-size: medium;
+				font-family: "微软雅黑";
+			}
+			
+			.mui-input-row textarea {
+				width: 60%;
+				height: 100%;
+			}
+			
+			.mui-input input {
+				width: 60%;
+				height: 100%;
+			}
+			
+			.mui-bar {
+				-webkit-box-shadow: none;
+				box-shadow: none;
+			}
+			
+			.mui-indexed-list-search input {
+				border-radius: 0px;
+				margin: 0px;
+				background-color: #fafafa;
+				margin-left: 25px;
+				height: 40px;
+				line-height: 40px;
+			}
+			
+			p {
+				background-color: rgb(239, 239, 244);
+				font-size: 10px;
+				border: 0;
+			}
+			span {
+				padding: 8px 15px;
+				display: inline-block;
+			}
+			textarea {
+				width: 50% !important;
+				float: left !important;
+				font-size: 14px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">板件回收扫描</h1>
+		</header>
+		<div class="mui-content" id="srapp">
+			<div style="position:fixed;z-index: 10;width:100%;display: block;">
+				<ul class="mui-table-view" style="margin: 0px;vertical-align: middle;vertical-align: center;">
+					<li class="mui-table-view-cell" style="vertical-align: middle;vertical-align: center;height: 60px">
+						<input type="text" id='phonebookseachfield' class="mui-input-clear" style="padding: 0px;width: 70%;height: 36px;text-indent: .5em;" placeholder="请输入流水号">
+						<button type="button" id="searchPhoneBook" class="mui-btn mui-btn-primary" style="width:20%;font-size: 16px; margin-right: 5px;" onclick="searchdata()">搜索</button>		
+					</li>
+				</ul>
+			</div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view" style="margin-top: 100px;">
+						<li class="mui-table-view-cell mui-collapse mui-active">
+							<a class="mui-navigate-right">基本信息</a>
+							<ul class="mui-table-view " id="test">
+								<!--动态加载数据-->
+								<div class="0">
+									<li class="mui-table-view-cell classname ">
+										<div class="mui-input-row">
+											<label>申请人:</label>
+											<span id="fld_ApplyUser">杨文成</span>
+										</div>
+									</li>
+									<li class="mui-table-view-cell classname ">
+										<div class="mui-input-row">
+											<label>申请时间:</label>
+											<span id="fld_ApplyDate">2020-03-18</span>
+										</div>
+									</li>
+								</div>
+							</ul>
+						</li>
+						<li class="mui-table-view-cell mui-collapse mui-active">
+							<a class="mui-navigate-right">回收扫码</a>
+							<ul class="mui-table-view " id="test">
+								<div class="plateMessage">
+									<li class="mui-table-view-cell classname">
+										<div class="mui-input-row">
+											<label style="height: 90px;">旧版件编号:</label>
+											<textarea type="text" class="mui-input" rows="4" :value="ercode"></textarea>
+											<span @click="scanFn" class=" mui-action-menu mui-icon  mui-icon-camera" style="position:absolute;right:0;font-size: 25px; border:0px"></span>
+										</div>
+									</li>
+								</div>
+							</ul>
+						</li>
+					</ul>
+					<button type="button" @click="" class="mui-btn mui-btn-primary" style="width:80%;font-size: 16px;margin:20px 0 0 10%;">提交</button>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/jquery-3.3.1.js"></script>
+		<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/app_base.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			var srapp = new Vue({
+				el: '#srapp',
+				data: {
+					ercode: ''
+				},
+				created() {
+					// this.loadData()
+				},
+				mounted() {
+				},
+				methods: {
+					loadData() {
+						let data = {};
+						let options = Options('/News/GetTopNewsData?type=', data, '', '', '', 'GET', 'json', false, '');
+						let res = DataRequest(options);
+						if (res && res.result == 'success') {
+							let info = JSON.parse(res.info)
+							this.contentArr = info.Tables
+						} else {
+							mui.alert("服务异常，请稍后重试"); 
+						}
+					},
+					scanFn() {
+						clicked('../barcode_scan.html', true, true);
+					}
+				}
+			})
+			function scaned(t, r, f) {
+				srapp.ercode = r
+			}
+		</script>
+	</body>
+</html>
