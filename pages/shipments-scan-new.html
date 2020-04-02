@@ -236,11 +236,14 @@
 			}
 			.table>thead>tr>th {
 			    vertical-align: bottom;
+				text-align: center;
 			}
 			.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
 			    padding: 10px;
 			    line-height: 1.5;
 			    border-color: #eceeef;
+				text-align: center;
+				word-break: break-all;
 			}
 			.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
 			    border-top: 0;
@@ -333,7 +336,7 @@
 										</label>
 										<label>
 											<input type="radio" name="radioName1" id="radio-manual" data-index="1"/>
-											<label class="radio-name">手动确认</label>
+											<label class="radio-name">人工确认</label>
 										</label>
 									</div>
 									<div class="plate-input-row mt20">
@@ -346,12 +349,12 @@
 						<li class="plate-table-view-cell plate-collapse plate-active" style="margin-top: 20px;">
 							<a class="plate-navigate-right">板件录入信息</a>
 							<div class="table-responsive">
-								<table class="table table-hover" cellpadding="0" cellspacing="0">
+								<table class="table table-hover" cellpadding="0" cellspacing="0" width="100%">
 									<thead>
 										<tr>
 											<th>#</th>
-											<th>板件型号</th>
-											<th>扫描编号</th>
+											<th style="width: 25%;">板件型号</th>
+											<th style="width: 40%;">扫描编号</th>
 											<th>录入类别</th>
 											<th>操作</th>
 										</tr>
@@ -431,10 +434,10 @@
 					var modelAllNum = plateObj.updateId ? plateObj.updateAllNum : plateObj.applyPlateMsg[plateObj.curModelIndex]['applyNum']
 					var htmlStr = '<tr>' + 
 									'<td>' + id + '</td>' +
-									'<td>' + modelName + '</td>' +
-									'<td>' + code + '</td>' + 
+									'<td style="width:25%;"><div>' + modelName + '</div></td>' +
+									'<td style="width:40%;"><div style="text-align: left;">' + code + '</div></td>' + 
 									'<td>' + 
-										(type === 'code' ? '<span class="label label-success">扫码确认</span>' : '<span class="label label-warning">手动确认</span>') +
+										(type === 'code' ? '<span class="label label-success">扫码确认</span>' : '<span class="label label-warning">人工确认</span>') +
 									'</td>' +
 									'<td><button type="button" class="pl-button pl-button-primary pl-button-update" data-id="' + id + '" data-index="' + indexItem + '" data-model="' + modelName + '" data-modelAllNum="' + modelAllNum + '">修改</button></td>' +
 								  '</tr>'
@@ -497,6 +500,7 @@
 			// 事件集合
 			plateObj.event = function () {
 				// 扫描完成
+				
 				$('#plate-box').on('keydown', '.plate-input', function (e) {
 					e = e || event;
 					var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
@@ -511,11 +515,14 @@
 				
 				// 手动确认
 				$('#plate-box').on('change', '#radio-manual', function () {
-					sradmin.UI.show_modal(false, '型号' + plateObj.applyPlateMsg[plateObj.curModelIndex]['model'] + '中第' + (plateObj.updateId ? plateObj.updateId : plateObj.plateIndex) + '块板件确定设置为手动确认？', '确定', '取消', function () {
+					sradmin.UI.show_modal(false, '型号' + (plateObj.updateId ? plateObj.updateModel : plateObj.applyPlateMsg[plateObj.curModelIndex]['model']) + '中第' + (plateObj.updateId ? plateObj.updateIndex : plateObj.plateIndex) + '块板件确定设置为手动确认？', '确定', '取消', function () {
 						plateObj.method.addScanItem(plateObj.plateIndex, 'manual', '')
 						$('.radio-scan').attr('checked', true)
 						$('.plate-input').focus()
-					}, '', false, '')
+					}, function () {
+						$('.radio-scan').attr('checked', true)
+						$('.plate-input').focus()
+					}, false, '')
 				})
 				
 				// 修改
